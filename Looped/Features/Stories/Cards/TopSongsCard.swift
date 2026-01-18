@@ -67,7 +67,7 @@ struct SongRow: View {
             Text("\(rank)")
                 .font(Typography.rankNumber)
                 .foregroundStyle(rankColor)
-                .frame(width: 36)
+                .frame(width: 24)
 
             // Album art
             AlbumArtworkView(
@@ -82,15 +82,14 @@ struct SongRow: View {
                 Text(song.title)
                     .font(Typography.rankTitle)
                     .foregroundStyle(LoopedTheme.primaryText)
-                    .lineLimit(1)
+                    .lineLimit(2)
 
                 Text(song.artistName)
                     .font(Typography.rankSubtitle)
                     .foregroundStyle(LoopedTheme.secondaryText)
                     .lineLimit(1)
             }
-
-            Spacer()
+            .frame(maxWidth: .infinity, alignment: .leading)
 
             // Play button
             Button {
@@ -111,9 +110,11 @@ struct SongRow: View {
                     .font(Typography.caption)
                     .foregroundStyle(LoopedTheme.tertiaryText)
             }
+            .fixedSize()
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
+        .frame(maxWidth: .infinity)
         .background(
             RoundedRectangle(cornerRadius: 16)
                 .fill(Color.white.opacity(0.08))
