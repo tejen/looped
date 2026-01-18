@@ -176,6 +176,8 @@ xcodebuild -project Looped.xcodeproj \
   build
 ```
 
+Alternatively, run from Xcode to any physical device. Ensure a provisioning profile is set under **Signing & Capabilities** in Xcode. To avoid conflicts, the bundle identifier can be changed if needed, to something that is available and unregistered by another signing team.
+
 ## Roadmap
 
 ### More Stats Cards
@@ -227,3 +229,7 @@ xcodebuild -project Looped.xcodeproj \
 - MusicKit requires an Apple Developer account with MusicKit capability
 - The app uses sample data when running in simulator without Apple Music access
 - Album artwork colors are extracted using Core Graphics for dynamic theming
+
+## Generative AI Disclosure
+
+This project was built with assistance from [Claude](https://claude.ai), an AI assistant by Anthropic. Claude helped with code generation, architecture decisions, and documentation.
