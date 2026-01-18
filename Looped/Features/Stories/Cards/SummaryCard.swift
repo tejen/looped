@@ -24,7 +24,7 @@ struct SummaryCard: View {
                             .font(Typography.cardSubtitle)
                             .foregroundStyle(LoopedTheme.secondaryText)
 
-                        Text("Wrapped")
+                        Text("Looped")
                             .font(.system(size: 48, weight: .black, design: .rounded))
                             .foregroundStyle(
                                 LinearGradient(
@@ -185,7 +185,7 @@ struct ShareButton: View {
         if let shareImage {
             ShareLink(
                 item: shareImage,
-                preview: SharePreview("My \(stats.year.unformatted) Wrapped", image: shareImage)
+                preview: SharePreview("My \(stats.year.unformatted) Looped", image: shareImage)
             ) {
                 shareButtonLabel
             }
@@ -203,7 +203,7 @@ struct ShareButton: View {
             Image(systemName: "square.and.arrow.up")
                 .font(.system(size: 18, weight: .semibold))
 
-            Text("Share Your Wrapped")
+            Text("Share Your Looped")
                 .font(Typography.buttonLarge)
         }
         .foregroundStyle(.black)
@@ -237,7 +237,7 @@ struct ShareableCard: View {
                     .font(.system(size: 18, weight: .medium, design: .rounded))
                     .foregroundStyle(.white.opacity(0.8))
 
-                Text("Wrapped")
+                Text("Looped")
                     .font(.system(size: 42, weight: .black, design: .rounded))
                     .foregroundStyle(.white)
             }

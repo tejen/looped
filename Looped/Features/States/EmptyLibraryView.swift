@@ -41,7 +41,7 @@ struct EmptyLibraryView: View {
                         .foregroundStyle(LoopedTheme.primaryText)
                         .multilineTextAlignment(.center)
 
-                    Text("Start listening to music on Apple Music to build your library. Once you have some listening history, come back to see your personalized Wrapped!")
+                    Text("Start listening to music on Apple Music to build your library. Once you have some listening history, come back to see your personalized Looped!")
                         .font(Typography.body)
                         .foregroundStyle(LoopedTheme.secondaryText)
                         .multilineTextAlignment(.center)
