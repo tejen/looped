@@ -1,0 +1,105 @@
+//
+//  MusicKitService.swift
+//  Looped
+//
+
+import Foundation
+import MusicKit
+
+actor MusicKitService {
+    static let shared = MusicKitService()
+
+    private init() {}
+
+    enum AuthorizationError: Error {
+        case denied
+        case restricted
+        case unknown
+    }
+
+    func requestAuthorization() async throws -> Bool {
+        let status = await MusicAuthorization.request()
+        switch status {
+        case .authorized:
+            return true
+        case .denied:
+            throw AuthorizationError.denied
+        case .restricted:
+            throw AuthorizationError.restricted
+        case .notDetermined:
+            throw AuthorizationError.unknown
+        @unknown default:
+            throw AuthorizationError.unknown
+        }
+    }
+
+    func checkAuthorizationStatus() -> MusicAuthorization.Status {
+        MusicAuthorization.currentStatus
+    }
+
+    func fetchRecentlyPlayed() async throws -> [RecentlyPlayedMusicItem] {
+        var request = MusicRecentlyPlayedRequest<Song>()
+        request.limit = 25
+        let response = try await request.response()
+
+        return response.items.map { song in
+            RecentlyPlayedMusicItem(
+                id: song.id.rawValue,
+                title: song.title,
+                artistName: song.artistName,
+                albumTitle: song.albumTitle ?? "",
+                artworkURL: song.artwork?.url(width: 600, height: 600),
+                duration: song.duration ?? 0,
+                genreNames: song.genreNames,
+                playDate: Date()
+            )
+        }
+    }
+
+    func fetchLibrarySongs() async throws -> [LibrarySongItem] {
+        var request = MusicLibraryRequest<Song>()
+        request.limit = 500
+        let response = try await request.response()
+
+        return response.items.map { song in
+            LibrarySongItem(
+                id: song.id.rawValue,
+                title: song.title,
+                artistName: song.artistName,
+                albumTitle: song.albumTitle ?? "",
+                artworkURL: song.artwork?.url(width: 600, height: 600),
+                duration: song.duration ?? 0,
+                genreNames: song.genreNames,
+                playCount: song.playCount ?? 0,
+                lastPlayedDate: song.lastPlayedDate
+            )
+        }
+    }
+
+    func fetchArtworkURL(for song: Song, size: Int = 600) -> URL? {
+        song.artwork?.url(width: size, height: size)
+    }
+}
+
+struct RecentlyPlayedMusicItem: Identifiable, Sendable {
+    let id: String
+    let title: String
+    let artistName: String
+    let albumTitle: String
+    let artworkURL: URL?
+    let duration: TimeInterval
+    let genreNames: [String]
+    let playDate: Date
+}
+
+struct LibrarySongItem: Identifiable, Sendable {
+    let id: String
+    let title: String
+    let artistName: String
+    let albumTitle: String
+    let artworkURL: URL?
+    let duration: TimeInterval
+    let genreNames: [String]
+    let playCount: Int
+    let lastPlayedDate: Date?
+}
