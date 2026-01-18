@@ -2,6 +2,16 @@
 
 A visually stunning year-in-review experience for Apple Music users, inspired by Spotify Wrapped. Built with SwiftUI for iOS 18+.
 
+## Screenshots
+
+| Welcome | Counters | Top Songs | Audio Aura |
+|---------|----------|-----------|------------|
+| ![Welcome](screenshots/welcome.png) | ![Counters](screenshots/counters.png) | ![Top Songs](screenshots/top_songs.png) | ![Audio Aura](screenshots/audio_aura.png) |
+
+| Listening Patterns | Share | Permission Denied |
+|--------------------|-------|-------------------|
+| ![Patterns](screenshots/listening_patterns.png) | ![Share](screenshots/share.png) | ![Permission Denied](screenshots/permission_denied.png) |
+
 ## Features
 
 - **Story-based Experience**: Instagram/Spotify Wrapped-style swipeable cards
