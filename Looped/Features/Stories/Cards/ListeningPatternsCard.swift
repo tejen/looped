@@ -84,27 +84,37 @@ struct HourlyChart: View {
 
     var body: some View {
         GeometryReader { geometry in
-            HStack(alignment: .bottom, spacing: 2) {
-                ForEach(0..<24, id: \.self) { hour in
-                    VStack(spacing: 4) {
-                        // Bar
+            VStack(spacing: 4) {
+                // Bars row
+                HStack(alignment: .bottom, spacing: 2) {
+                    ForEach(0..<24, id: \.self) { hour in
                         RoundedRectangle(cornerRadius: 2)
                             .fill(barColor(for: hour))
                             .frame(height: showChart ? barHeight(for: hour, maxHeight: geometry.size.height - 20) : 0)
+                            .frame(maxWidth: .infinity)
                             .animation(
                                 .spring(response: 0.6, dampingFraction: 0.7).delay(Double(hour) * 0.02),
                                 value: showChart
                             )
-
-                        // Label (only for key hours)
-                        if hour % 6 == 0 {
-                            Text(hourLabel(for: hour))
-                                .font(.system(size: 9))
-                                .foregroundStyle(LoopedTheme.tertiaryText)
-                        }
                     }
-                    .frame(maxWidth: .infinity)
                 }
+
+                // Labels row - position labels at key hours
+                ZStack(alignment: .leading) {
+                    HStack {
+                        Text("12a")
+                        Spacer()
+                        Text("6a")
+                        Spacer()
+                        Text("12p")
+                        Spacer()
+                        Text("6p")
+                        Spacer()
+                    }
+                    .font(.system(size: 10))
+                    .foregroundStyle(LoopedTheme.tertiaryText)
+                }
+                .frame(height: 14)
             }
         }
     }
