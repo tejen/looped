@@ -69,33 +69,6 @@ struct StoryContainerView: View {
                 }
             }
 
-            // Tap zones overlay (only covers upper 60% to allow button taps below)
-            VStack(spacing: 0) {
-                HStack(spacing: 0) {
-                    // Left tap zone (go back)
-                    Color.clear
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            viewModel.goToPreviousCard()
-                        }
-
-                    // Middle zone (no action, allows taps to pass through)
-                    Color.clear
-                        .allowsHitTesting(false)
-
-                    // Right tap zone (go forward)
-                    Color.clear
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            viewModel.advanceToNextCard()
-                        }
-                }
-                .frame(height: UIScreen.main.bounds.height * 0.6)
-
-                // Bottom area - allows button taps to pass through
-                Color.clear
-                    .allowsHitTesting(false)
-            }
         }
         .gesture(
             DragGesture(minimumDistance: 20)
