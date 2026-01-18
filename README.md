@@ -1,6 +1,6 @@
 # Looped - Apple Music Year in Review
 
-A visually stunning year-in-review experience for Apple Music users, inspired by Spotify Wrapped. Built with SwiftUI for iOS 18+.
+A year-in-review experience for Apple Music users, inspired by Spotify Wrapped. Built with SwiftUI for iOS 18+.
 
 ## Screenshots
 
@@ -175,6 +175,52 @@ xcodebuild -project Looped.xcodeproj \
   -destination 'platform=iOS Simulator,name=iPhone 17 Pro' \
   build
 ```
+
+## Roadmap
+
+### More Stats Cards
+- [ ] **Top Albums** - Showcase most-played albums with cover art grid
+- [ ] **Monthly Breakdown** - Your top song for each month of the year
+- [ ] **New Discoveries** - Artists you started listening to this year
+- [ ] **Deep Cuts** - Songs you played way more than the average listener
+- [ ] **Listening Streaks** - Longest consecutive days of listening
+- [ ] **Seasonal Vibes** - How your taste changed across seasons
+- [ ] **Decade on Apple Music** - Multi-year retrospective for long-time users
+- [ ] **Artist Journey** - Timeline of when you discovered each top artist
+
+### Playback Features
+- [ ] **Mini Player** - Floating player to preview songs without leaving the app
+- [ ] **Generate Playlist** - Create "Top Songs 2025" playlist directly in Apple Music
+- [ ] **Play Top Artist** - One-tap to play your #1 artist's discography
+- [ ] **Rediscover Playlist** - Songs you loved but haven't played recently
+- [ ] **Queue Management** - Add top songs to current queue
+
+### Sharing & Social
+- [ ] **Instagram Stories Export** - Properly formatted vertical cards for Stories
+- [ ] **Video Generation** - Animated video recap to share on social media
+- [ ] **Compare with Friends** - Side-by-side stats comparison via SharePlay
+- [ ] **Shareable Links** - Web preview of your wrapped stats
+
+### UI/UX Enhancements
+- [ ] **iPad Layout** - Optimized two-column layout for larger screens
+- [ ] **Interactive Charts** - Tap into listening patterns for detailed breakdowns
+- [ ] **Long-press Actions** - Quick actions on songs (add to library, share, etc.)
+- [ ] **Accessibility** - VoiceOver improvements, Dynamic Type support
+- [ ] **Localization** - Support for multiple languages
+
+### Data & Insights
+- [ ] **Year-over-Year** - Compare this year to previous years
+- [ ] **Listening Predictions** - "You might hit 1000 hours by December"
+- [ ] **Genre Evolution** - How your taste has shifted over time
+- [ ] **Peak Listening Times** - Most active listening hours with context
+
+### Technical Improvements
+- [ ] **CloudKit Sync** - Persist historical stats across devices
+- [ ] **Apple Watch App** - Glanceable stats on your wrist
+- [ ] **Widgets** - Home screen widgets showing current year stats
+- [ ] **Shortcuts Integration** - "Hey Siri, show my music wrapped"
+- [ ] **Background Refresh** - Keep stats up-to-date automatically
+- [ ] **Offline Support** - Cache stats for offline viewing
 
 ## Notes
 
