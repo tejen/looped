@@ -61,19 +61,32 @@ actor MusicKitService {
         request.limit = 500
         let response = try await request.response()
 
-        return response.items.map { song in
-            LibrarySongItem(
+        var items: [LibrarySongItem] = []
+
+        for song in response.items {
+            // Load genres relationship for each song
+            var genreNames = song.genreNames
+            if genreNames.isEmpty {
+                // Try to load genres from the full song data
+                if let songWithGenres = try? await song.with([.genres]) {
+                    genreNames = songWithGenres.genres?.map { $0.name } ?? []
+                }
+            }
+
+            items.append(LibrarySongItem(
                 id: song.id.rawValue,
                 title: song.title,
                 artistName: song.artistName,
                 albumTitle: song.albumTitle ?? "",
                 artworkURL: song.artwork?.url(width: 600, height: 600),
                 duration: song.duration ?? 0,
-                genreNames: song.genreNames,
+                genreNames: genreNames,
                 playCount: song.playCount ?? 0,
                 lastPlayedDate: song.lastPlayedDate
-            )
+            ))
         }
+
+        return items
     }
 
     func fetchArtworkURL(for song: Song, size: Int = 600) -> URL? {

@@ -55,7 +55,7 @@ struct GenreBar: View {
     let delay: Double
     let showBar: Bool
 
-    @State private var animatedWidth: CGFloat = 0
+    @State private var animatedProgress: CGFloat = 0
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -77,7 +77,7 @@ struct GenreBar: View {
                     RoundedRectangle(cornerRadius: 8)
                         .fill(Color.white.opacity(0.1))
 
-                    // Fill
+                    // Fill - use geometry width for proper sizing
                     RoundedRectangle(cornerRadius: 8)
                         .fill(
                             LinearGradient(
@@ -86,19 +86,20 @@ struct GenreBar: View {
                                 endPoint: .trailing
                             )
                         )
-                        .frame(width: animatedWidth)
+                        .frame(width: geometry.size.width * animatedProgress)
                 }
             }
-            .frame(height: 12)
+            .frame(height: 16)
         }
         .opacity(showBar ? 1 : 0)
         .offset(x: showBar ? 0 : -30)
-        .onChange(of: showBar) { _, newValue in
-            if newValue {
-                withAnimation(.spring(response: 0.8, dampingFraction: 0.7).delay(delay)) {
-                    // Calculate proportional width based on max percentage
-                    let proportion = genre.percentage / maxPercentage
-                    animatedWidth = UIScreen.main.bounds.width * 0.7 * CGFloat(proportion)
+        .animation(.spring(response: 0.5, dampingFraction: 0.8).delay(delay), value: showBar)
+        .onAppear {
+            // Delay the bar animation slightly after appear
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3 + delay) {
+                withAnimation(.spring(response: 0.8, dampingFraction: 0.7)) {
+                    let proportion = maxPercentage > 0 ? genre.percentage / maxPercentage : 0
+                    animatedProgress = CGFloat(proportion)
                 }
             }
         }
