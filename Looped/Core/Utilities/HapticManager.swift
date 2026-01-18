@@ -32,4 +32,8 @@ enum HapticManager {
     static func complete() {
         notification(.success)
     }
+
+    static func error() {
+        notification(.error)
+    }
 }

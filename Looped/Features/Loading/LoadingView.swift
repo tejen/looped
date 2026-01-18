@@ -8,6 +8,8 @@ import SwiftUI
 struct LoadingView: View {
     @Binding var stats: ListeningStats?
     @Binding var isLoading: Bool
+    var onError: ((String) -> Void)?
+    var onEmptyLibrary: (() -> Void)?
     @State private var progress: Double = 0
     @State private var currentPhase = 0
     @State private var showPhaseText = false
@@ -125,27 +127,27 @@ struct LoadingView: View {
     private func loadStats() async {
         do {
             let songs = try await MusicKitService.shared.fetchLibrarySongs()
+
+            // Check for empty library
+            let songsWithPlays = songs.filter { $0.playCount > 0 }
+            if songsWithPlays.isEmpty {
+                await MainActor.run {
+                    onEmptyLibrary?()
+                }
+                return
+            }
+
             let calculatedStats = await StatsCalculationEngine.shared.calculateStats(from: songs)
 
             await MainActor.run {
-                // Use sample data if library is empty
-                if songs.isEmpty {
-                    stats = .sample
-                } else {
-                    stats = calculatedStats
-                }
-
+                stats = calculatedStats
                 withAnimation {
                     isLoading = false
                 }
             }
         } catch {
             await MainActor.run {
-                // Fall back to sample data on error
-                stats = .sample
-                withAnimation {
-                    isLoading = false
-                }
+                onError?("We couldn't load your music data. Please check your internet connection and try again.")
             }
         }
     }

@@ -8,6 +8,7 @@ import MusicKit
 
 struct OnboardingView: View {
     @Binding var isAuthorized: Bool
+    var onPermissionDenied: (() -> Void)?
     @State private var isAnimating = false
     @State private var isRequesting = false
     @State private var showError = false
@@ -161,9 +162,14 @@ struct OnboardingView: View {
             } catch MusicKitService.AuthorizationError.denied {
                 await MainActor.run {
                     isRequesting = false
-                    errorMessage = "Access to Apple Music was denied. Please enable it in Settings."
-                    showError = true
                     HapticManager.notification(.error)
+                    onPermissionDenied?()
+                }
+            } catch MusicKitService.AuthorizationError.restricted {
+                await MainActor.run {
+                    isRequesting = false
+                    HapticManager.notification(.error)
+                    onPermissionDenied?()
                 }
             } catch {
                 await MainActor.run {

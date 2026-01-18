@@ -8,10 +8,13 @@
 import SwiftUI
 import MusicKit
 
-enum AppState {
+enum AppState: Equatable {
     case onboarding
     case loading
     case stories
+    case permissionDenied
+    case emptyLibrary
+    case error(String)
 }
 
 struct ContentView: View {
@@ -24,11 +27,23 @@ struct ContentView: View {
         ZStack {
             switch appState {
             case .onboarding:
-                OnboardingView(isAuthorized: $isAuthorized)
+                OnboardingView(isAuthorized: $isAuthorized, onPermissionDenied: {
+                    withAnimation {
+                        appState = .permissionDenied
+                    }
+                })
                     .transition(.opacity)
 
             case .loading:
-                LoadingView(stats: $stats, isLoading: $isLoading)
+                LoadingView(stats: $stats, isLoading: $isLoading, onError: { error in
+                    withAnimation {
+                        appState = .error(error)
+                    }
+                }, onEmptyLibrary: {
+                    withAnimation {
+                        appState = .emptyLibrary
+                    }
+                })
                     .transition(.opacity)
 
             case .stories:
@@ -36,6 +51,30 @@ struct ContentView: View {
                     StoryContainerView(stats: stats)
                         .transition(.opacity)
                 }
+
+            case .permissionDenied:
+                PermissionDeniedView(onRetry: {
+                    withAnimation {
+                        appState = .onboarding
+                    }
+                })
+                    .transition(.opacity)
+
+            case .emptyLibrary:
+                EmptyLibraryView(onRetry: {
+                    withAnimation {
+                        appState = .loading
+                    }
+                })
+                    .transition(.opacity)
+
+            case .error(let message):
+                ErrorStateView(message: message, onRetry: {
+                    withAnimation {
+                        appState = .loading
+                    }
+                })
+                    .transition(.opacity)
             }
         }
         .animation(.easeInOut(duration: 0.5), value: appState)
