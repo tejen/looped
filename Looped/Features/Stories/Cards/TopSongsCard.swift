@@ -4,6 +4,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 struct TopSongsCard: View {
     let songs: [SongStats]
@@ -58,6 +59,7 @@ struct SongRow: View {
     let rank: Int
     let song: SongStats
     let isVisible: Bool
+    @State private var isPlaying = false
 
     var body: some View {
         HStack(spacing: 16) {
@@ -90,6 +92,16 @@ struct SongRow: View {
 
             Spacer()
 
+            // Play button
+            Button {
+                playTapped()
+            } label: {
+                Image(systemName: isPlaying ? "pause.circle.fill" : "play.circle.fill")
+                    .font(.system(size: 32))
+                    .foregroundStyle(LoopedTheme.primaryText)
+            }
+            .buttonStyle(.plain)
+
             // Play count
             VStack(alignment: .trailing, spacing: 2) {
                 Text(song.formattedPlayCount)
@@ -108,6 +120,31 @@ struct SongRow: View {
         )
         .opacity(isVisible ? 1 : 0)
         .offset(x: isVisible ? 0 : 50)
+    }
+
+    private func playTapped() {
+        let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+        impactFeedback.impactOccurred()
+
+        if isPlaying {
+            Task {
+                await MusicKitService.shared.pausePlayback()
+                await MainActor.run {
+                    isPlaying = false
+                }
+            }
+        } else {
+            Task {
+                do {
+                    try await MusicKitService.shared.playSong(id: song.id)
+                    await MainActor.run {
+                        isPlaying = true
+                    }
+                } catch {
+                    print("Failed to play song: \(error)")
+                }
+            }
+        }
     }
 
     private var rankColor: Color {

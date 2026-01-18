@@ -12,6 +12,7 @@ struct ArtistStats: Identifiable, Sendable {
     let playCount: Int
     let totalPlayTime: TimeInterval
     let topSongTitle: String?
+    let topSongID: String?
     let genres: [String]
 
     var formattedPlayCount: String {

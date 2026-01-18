@@ -55,18 +55,21 @@ actor StatsCalculationEngine {
     }
 
     private func calculateTopArtists(from songs: [LibrarySongItem], limit: Int = 5) -> [ArtistStats] {
-        var artistData: [String: (playCount: Int, playTime: TimeInterval, topSong: String?, genres: Set<String>, artworkURL: URL?)] = [:]
+        var artistData: [String: (playCount: Int, playTime: TimeInterval, topSong: String?, topSongID: String?, topSongPlayCount: Int, genres: Set<String>, artworkURL: URL?)] = [:]
 
         for song in songs {
-            let existing = artistData[song.artistName] ?? (0, 0, nil, [], nil)
+            let existing = artistData[song.artistName] ?? (0, 0, nil, nil, 0, [], nil)
             let newPlayCount = existing.playCount + song.playCount
             let newPlayTime = existing.playTime + (song.duration * Double(song.playCount))
-            let topSong = existing.playCount > song.playCount ? existing.topSong : song.title
+            // Track the song with highest play count as the top song
+            let (topSong, topSongID, topSongPlayCount): (String?, String?, Int) = song.playCount > existing.topSongPlayCount
+                ? (song.title, song.id, song.playCount)
+                : (existing.topSong, existing.topSongID, existing.topSongPlayCount)
             var genres = existing.genres
             song.genreNames.forEach { genres.insert($0) }
             let artwork = existing.artworkURL ?? song.artworkURL
 
-            artistData[song.artistName] = (newPlayCount, newPlayTime, topSong, genres, artwork)
+            artistData[song.artistName] = (newPlayCount, newPlayTime, topSong, topSongID, topSongPlayCount, genres, artwork)
         }
 
         let sorted = artistData.sorted { $0.value.playCount > $1.value.playCount }
@@ -78,6 +81,7 @@ actor StatsCalculationEngine {
                 playCount: item.value.playCount,
                 totalPlayTime: item.value.playTime,
                 topSongTitle: item.value.topSong,
+                topSongID: item.value.topSongID,
                 genres: Array(item.value.genres)
             )
         }

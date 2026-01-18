@@ -4,11 +4,13 @@
 //
 
 import SwiftUI
+import UIKit
 
 struct TopArtistCard: View {
     let artist: ArtistStats?
     @State private var isVisible = false
     @State private var showDetails = false
+    @State private var isPlayingTopSong = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -74,9 +76,22 @@ struct TopArtistCard: View {
                         }
 
                         if let topSong = artist.topSongTitle {
-                            Text("Top track: \(topSong)")
-                                .font(Typography.body)
-                                .foregroundStyle(LoopedTheme.secondaryText)
+                            HStack(spacing: 8) {
+                                Text("Top track: \(topSong)")
+                                    .font(Typography.body)
+                                    .foregroundStyle(LoopedTheme.secondaryText)
+
+                                if artist.topSongID != nil {
+                                    Button {
+                                        playTopSongTapped()
+                                    } label: {
+                                        Image(systemName: isPlayingTopSong ? "pause.circle.fill" : "play.circle.fill")
+                                            .font(.system(size: 24))
+                                            .foregroundStyle(LoopedTheme.primaryText)
+                                    }
+                                    .buttonStyle(.plain)
+                                }
+                            }
                         }
                     }
                     .opacity(showDetails ? 1 : 0)
@@ -97,6 +112,33 @@ struct TopArtistCard: View {
             }
             withAnimation(LoopedTheme.defaultAnimation.delay(0.4)) {
                 showDetails = true
+            }
+        }
+    }
+
+    private func playTopSongTapped() {
+        guard let songID = artist?.topSongID else { return }
+
+        let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+        impactFeedback.impactOccurred()
+
+        if isPlayingTopSong {
+            Task {
+                await MusicKitService.shared.pausePlayback()
+                await MainActor.run {
+                    isPlayingTopSong = false
+                }
+            }
+        } else {
+            Task {
+                do {
+                    try await MusicKitService.shared.playSong(id: songID)
+                    await MainActor.run {
+                        isPlayingTopSong = true
+                    }
+                } catch {
+                    print("Failed to play song: \(error)")
+                }
             }
         }
     }

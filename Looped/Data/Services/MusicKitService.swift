@@ -9,6 +9,8 @@ import MusicKit
 actor MusicKitService {
     static let shared = MusicKitService()
 
+    private let player = ApplicationMusicPlayer.shared
+
     private init() {}
 
     enum AuthorizationError: Error {
@@ -91,6 +93,39 @@ actor MusicKitService {
 
     func fetchArtworkURL(for song: Song, size: Int = 600) -> URL? {
         song.artwork?.url(width: size, height: size)
+    }
+
+    // MARK: - Playback
+
+    enum PlaybackError: Error {
+        case songNotFound
+        case playbackFailed
+    }
+
+    func playSong(id: String) async throws {
+        // Use library request since songs come from user's library
+        var request = MusicLibraryRequest<Song>()
+        request.filter(matching: \.id, equalTo: MusicItemID(id))
+        let response = try await request.response()
+
+        guard let song = response.items.first else {
+            throw PlaybackError.songNotFound
+        }
+
+        player.queue = [song]
+        try await player.play()
+    }
+
+    func pausePlayback() {
+        player.pause()
+    }
+
+    func stopPlayback() {
+        player.stop()
+    }
+
+    var isPlaying: Bool {
+        player.state.playbackStatus == .playing
     }
 }
 

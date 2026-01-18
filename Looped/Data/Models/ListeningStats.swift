@@ -38,11 +38,11 @@ struct ListeningStats: Sendable {
             totalSongsPlayed: 8_432,
             totalArtistsDiscovered: 247,
             topArtists: [
-                ArtistStats(id: "1", name: "Taylor Swift", artworkURL: nil, playCount: 892, totalPlayTime: 48600, topSongTitle: "Anti-Hero", genres: ["Pop", "Country"]),
-                ArtistStats(id: "2", name: "The Weeknd", artworkURL: nil, playCount: 654, totalPlayTime: 35400, topSongTitle: "Blinding Lights", genres: ["R&B", "Pop"]),
-                ArtistStats(id: "3", name: "Drake", artworkURL: nil, playCount: 521, totalPlayTime: 28200, topSongTitle: "Rich Flex", genres: ["Hip-Hop", "R&B"]),
-                ArtistStats(id: "4", name: "Dua Lipa", artworkURL: nil, playCount: 445, totalPlayTime: 24000, topSongTitle: "Levitating", genres: ["Pop", "Dance"]),
-                ArtistStats(id: "5", name: "Bad Bunny", artworkURL: nil, playCount: 398, totalPlayTime: 21600, topSongTitle: "Me Porto Bonito", genres: ["Reggaeton", "Latin"]),
+                ArtistStats(id: "1", name: "Taylor Swift", artworkURL: nil, playCount: 892, totalPlayTime: 48600, topSongTitle: "Anti-Hero", topSongID: "1", genres: ["Pop", "Country"]),
+                ArtistStats(id: "2", name: "The Weeknd", artworkURL: nil, playCount: 654, totalPlayTime: 35400, topSongTitle: "Blinding Lights", topSongID: "2", genres: ["R&B", "Pop"]),
+                ArtistStats(id: "3", name: "Drake", artworkURL: nil, playCount: 521, totalPlayTime: 28200, topSongTitle: "Rich Flex", topSongID: "3", genres: ["Hip-Hop", "R&B"]),
+                ArtistStats(id: "4", name: "Dua Lipa", artworkURL: nil, playCount: 445, totalPlayTime: 24000, topSongTitle: "Levitating", topSongID: "4", genres: ["Pop", "Dance"]),
+                ArtistStats(id: "5", name: "Bad Bunny", artworkURL: nil, playCount: 398, totalPlayTime: 21600, topSongTitle: "Me Porto Bonito", topSongID: "5", genres: ["Reggaeton", "Latin"]),
             ],
             topSongs: [
                 SongStats(id: "1", title: "Anti-Hero", artistName: "Taylor Swift", albumTitle: "Midnights", artworkURL: nil, playCount: 247, totalPlayTime: 14820),
