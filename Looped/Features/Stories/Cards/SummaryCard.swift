@@ -179,10 +179,21 @@ struct SummaryStatBox: View {
 
 struct ShareButton: View {
     let stats: ListeningStats
-    @State private var isPressed = false
+
+    private var shareText: String {
+        """
+        My \(stats.year) Apple Music Wrapped:
+
+        🎧 \(stats.totalHours) hours of music
+        🎵 \(stats.totalSongsPlayed.formatted()) songs played
+        ⭐ Top artist: \(stats.topArtists.first?.name ?? "Unknown")
+
+        Generated with Looped
+        """
+    }
 
     var body: some View {
-        Button(action: shareStats) {
+        ShareLink(item: shareText) {
             HStack(spacing: 12) {
                 Image(systemName: "square.and.arrow.up")
                     .font(.system(size: 18, weight: .semibold))
@@ -197,39 +208,8 @@ struct ShareButton: View {
                 Capsule()
                     .fill(Color.white)
             )
-            .scaleEffect(isPressed ? 0.95 : 1)
         }
         .buttonStyle(.plain)
-        .onLongPressGesture(minimumDuration: .infinity, pressing: { pressing in
-            withAnimation(.easeInOut(duration: 0.1)) {
-                isPressed = pressing
-            }
-        }, perform: {})
-    }
-
-    private func shareStats() {
-        HapticManager.impact(.medium)
-
-        let shareText = """
-        My \(stats.year) Apple Music Wrapped:
-
-        \(stats.totalHours) hours of music
-        \(stats.totalSongsPlayed.formatted()) songs played
-        Top artist: \(stats.topArtists.first?.name ?? "Unknown")
-
-        Generated with Looped
-        """
-
-        let activityVC = UIActivityViewController(
-            activityItems: [shareText],
-            applicationActivities: nil
-        )
-
-        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-           let window = windowScene.windows.first,
-           let rootVC = window.rootViewController {
-            rootVC.present(activityVC, animated: true)
-        }
     }
 }
 
