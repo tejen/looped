@@ -56,7 +56,9 @@ struct StoryContainerView: View {
                         AudioAuraCard(aura: viewModel.stats.audioAura)
                             .tag(6)
 
-                        SummaryCard(stats: viewModel.stats)
+                        SummaryCard(stats: viewModel.stats) {
+                            viewModel.goToCard(0)
+                        }
                             .tag(7)
                     }
                     .tabViewStyle(.page(indexDisplayMode: .never))

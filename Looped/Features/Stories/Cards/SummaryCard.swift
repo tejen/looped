@@ -7,6 +7,7 @@ import SwiftUI
 
 struct SummaryCard: View {
     let stats: ListeningStats
+    var onReplay: (() -> Void)?
     @State private var isVisible = false
     @State private var showStats = false
     @State private var showConfetti = false
@@ -17,11 +18,21 @@ struct SummaryCard: View {
                 Spacer()
 
                 VStack(spacing: 32) {
-                    // Header
-                    VStack(spacing: 8) {
-                        Text("Your \(stats.year) Wrapped")
-                            .font(Typography.cardTitle)
-                            .foregroundStyle(LoopedTheme.primaryText)
+                    // Header with celebration emoji
+                    VStack(spacing: 12) {
+                        Text("Your \(stats.year)")
+                            .font(Typography.cardSubtitle)
+                            .foregroundStyle(LoopedTheme.secondaryText)
+
+                        Text("Wrapped")
+                            .font(.system(size: 48, weight: .black, design: .rounded))
+                            .foregroundStyle(
+                                LinearGradient(
+                                    colors: [.white, .white.opacity(0.8)],
+                                    startPoint: .top,
+                                    endPoint: .bottom
+                                )
+                            )
 
                         Text("What a year for music!")
                             .font(Typography.body)
@@ -78,9 +89,10 @@ struct SummaryCard: View {
                         .opacity(showStats ? 1 : 0)
                         .offset(y: showStats ? 0 : 20)
 
-                    // Replay hint
+                    // Replay button
                     Button(action: {
                         HapticManager.selection()
+                        onReplay?()
                     }) {
                         HStack(spacing: 8) {
                             Image(systemName: "arrow.counterclockwise")
@@ -88,6 +100,12 @@ struct SummaryCard: View {
                         }
                         .font(Typography.body)
                         .foregroundStyle(LoopedTheme.secondaryText)
+                        .padding(.horizontal, 24)
+                        .padding(.vertical, 12)
+                        .background(
+                            Capsule()
+                                .fill(Color.white.opacity(0.1))
+                        )
                     }
                     .opacity(showStats ? 1 : 0)
                 }

@@ -115,6 +115,10 @@ Looped/
 - [x] Animated gradients (MeshGradient + LinearGradient)
 - [x] Haptic feedback integration
 - [x] Share functionality
+- [x] "Watch Again" replay feature
+- [x] Pulsing animation rings on welcome card
+- [x] Vignette overlay for depth
+- [x] Confetti celebration on summary card
 
 ### Technical Highlights
 

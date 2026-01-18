@@ -24,10 +24,8 @@ struct GradientBackground: View {
 
 struct MeshGradientBackground: View {
     let colors: [Color]
-    @State private var phase: Double = 0
 
     private var expandedColors: [Color] {
-        // MeshGradient needs 9 colors for 3x3 grid
         var result: [Color] = []
         for i in 0..<9 {
             result.append(colors[i % colors.count])
@@ -38,19 +36,41 @@ struct MeshGradientBackground: View {
     var body: some View {
         TimelineView(.animation(minimumInterval: 1/30)) { timeline in
             let time = timeline.date.timeIntervalSinceReferenceDate
+            let points = computePoints(time: time)
 
-            MeshGradient(
-                width: 3,
-                height: 3,
-                points: [
-                    [0.0, 0.0], [0.5 + Float(sin(time * 0.5)) * 0.1, 0.0], [1.0, 0.0],
-                    [0.0, 0.5 + Float(cos(time * 0.3)) * 0.1], [0.5 + Float(sin(time * 0.7)) * 0.15, 0.5 + Float(cos(time * 0.4)) * 0.15], [1.0, 0.5 + Float(sin(time * 0.6)) * 0.1],
-                    [0.0, 1.0], [0.5 + Float(cos(time * 0.4)) * 0.1, 1.0], [1.0, 1.0]
-                ],
-                colors: expandedColors
-            )
+            ZStack {
+                MeshGradient(
+                    width: 3,
+                    height: 3,
+                    points: points,
+                    colors: expandedColors
+                )
+
+                // Subtle vignette for depth
+                RadialGradient(
+                    colors: [.clear, .black.opacity(0.3)],
+                    center: .center,
+                    startRadius: 200,
+                    endRadius: 600
+                )
+            }
         }
         .ignoresSafeArea()
+    }
+
+    private func computePoints(time: Double) -> [SIMD2<Float>] {
+        let t = Float(time)
+        return [
+            SIMD2(0.0, 0.0),
+            SIMD2(0.5 + sin(t * 0.5) * 0.1, 0.0),
+            SIMD2(1.0, 0.0),
+            SIMD2(0.0, 0.5 + cos(t * 0.3) * 0.1),
+            SIMD2(0.5 + sin(t * 0.7) * 0.15, 0.5 + cos(t * 0.4) * 0.15),
+            SIMD2(1.0, 0.5 + sin(t * 0.6) * 0.1),
+            SIMD2(0.0, 1.0),
+            SIMD2(0.5 + cos(t * 0.4) * 0.1, 1.0),
+            SIMD2(1.0, 1.0)
+        ]
     }
 }
 
