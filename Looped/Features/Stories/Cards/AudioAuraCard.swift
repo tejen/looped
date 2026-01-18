@@ -137,15 +137,19 @@ struct MoodBadge: View {
             Text(mood.rawValue)
                 .font(isPrimary ? Typography.bodyBold : Typography.body)
         }
-        .foregroundStyle(mood.color)
+        .foregroundStyle(.white)
         .padding(.horizontal, 16)
         .padding(.vertical, 10)
         .background(
             Capsule()
-                .fill(mood.color.opacity(0.2))
+                .fill(.ultraThinMaterial)
                 .overlay(
                     Capsule()
-                        .stroke(mood.color.opacity(0.3), lineWidth: 1)
+                        .fill(mood.color.opacity(0.3))
+                )
+                .overlay(
+                    Capsule()
+                        .stroke(Color.white.opacity(0.2), lineWidth: 1)
                 )
         )
     }
