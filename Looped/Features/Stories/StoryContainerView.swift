@@ -20,8 +20,8 @@ struct StoryContainerView: View {
 
             // Particles overlay (ignores safe area)
             ParticleEmitterView(
-                colors: [.white.opacity(0.3), .white.opacity(0.1)],
-                particleCount: 25
+                colors: [.white.opacity(0.6), .white.opacity(0.4)],
+                particleCount: 40
             )
             .ignoresSafeArea()
 
